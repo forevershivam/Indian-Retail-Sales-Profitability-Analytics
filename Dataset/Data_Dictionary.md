@@ -98,22 +98,26 @@ The existing Power BI model screenshot shows four dimension-to-fact relationship
 
 **Source-recorded status distribution:** Delivered **126,490**, Returned **5,573**, Cancelled **5,937**.
 
-### Important revenue and profit semantics
+### Revenue and profit definitions
 
-- `Net_Sales` is **positive even for Returned and Cancelled orders**, so summing it over all 138,000 orders does **not** represent delivered revenue.
-- Delivered-only `SUM(Net_Sales)` = **₹1,551,711,257.30**.
-- Delivered-only `SUM(Profit)` = **₹262,956,576.19**.
-- Estimated delivered product margin = **16.95%**.
-- All returned rows have negative source `Profit`; all cancelled rows have zero source `Profit`. There is no separate refund or returns-ledger table.
-- Avoid labeling `Profit` as audited net profit or deriving fulfillment costs from `Shipping_Charge` without more documentation.
+The source stores positive `Net_Sales` values even when an order is marked Returned or Cancelled. For this reason, the delivered revenue measure includes only rows with `Order_Status = 'Delivered'`.
 
-## 6. Provenance, export formats and limits
+| Delivered order metric | Verified result |
+|:--|--:|
+| `SUM(Net_Sales)` | **₹1,551,711,257.30** |
+| `SUM(Profit)` | **₹262,956,576.19** |
+| Estimated product profit margin | **16.95%** |
 
-- Original source file: `Indian_Retail_Sales_2023_2025.csv`.
-- Excel workbook audited: `MY WOK.xlsx`, with `Raw_Data` plus four dimensions and `Fact_Sales`.
-- The five exported CSVs follow the corresponding fact/dimension field layouts.
-- Date exports are displayed as `DD-MM-YYYY`, currency as INR-formatted text, and discounts as percentages; SQL imports must parse them as true dates and numeric values.
-- The dataset's status as real company data versus synthetic/practice data has **not** been independently verified. No claim of real-world business impact should be made without evidence.
-- Customer and employee names/location attributes should only be published with appropriate rights and privacy review. This public repository deliberately documents schema and transformations without publishing those raw identifiable records.
+The source records negative `Profit` values for returned orders and zero `Profit` for cancelled orders. No separate refund ledger is available in the provided tables. The `Profit` field should therefore be described as estimated product profit, not audited business net profit. Likewise, shipping charges cannot be assumed to represent a specific fulfillment cost or revenue treatment without further context.
+
+## 6. Source files, formats and limitations
+
+The original source is `Indian_Retail_Sales_2023_2025.csv`. The audited Excel workbook, `MY WOK.xlsx`, contains the cleaned `Raw_Data` sheet, `Fact_Sales`, and four dimension sheets. Five CSV files were exported from the fact and dimension tables for further analysis.
+
+Exported dates use `DD-MM-YYYY` formatting, monetary values use INR formatting, and discount values are displayed as percentages. Before importing the files to MySQL, those representations need to be parsed as dates and numeric values.
+
+It has not been independently verified whether the dataset represents a real company or a synthetic practice scenario. Accordingly, the project does not claim verified commercial results or measurable changes in an actual business.
+
+Customer and employee names and location fields are excluded from this public repository. Publishing individual records would require an appropriate review of privacy and data sharing rights.
 
 See [Excel Data Preparation](../Excel/Data_Preparation.md) for the cleaning workflow, workbook formulas and audit evidence.
