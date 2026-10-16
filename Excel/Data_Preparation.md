@@ -1,10 +1,10 @@
 # Excel Data Preparation & Dimensional Modeling
 
 **Project:** Indian Retail Sales & Profitability Intelligence  
-**Stage:** Completed — Excel data preparation  
+**Stage:** Excel data preparation completed  
 **Tools demonstrated:** Microsoft Excel, dynamic arrays, lookup formulas, date functions, source-to-output reconciliation
 
-> **Evidence standard:** This document is based on the original `Indian_Retail_Sales_2023_2025.csv`, the completed six-sheet Excel workbook (`MY WOK.xlsx`), all five exported analytical CSVs, and a record-by-record audit. It describes work visible in the deliverables; it does not claim undocumented VBA, macros, automated refresh, or business outcomes.
+> **Audit basis:** This document is based on the original `Indian_Retail_Sales_2023_2025.csv`, the completed six-sheet Excel workbook (`MY WOK.xlsx`), all five exported analytical CSVs, and a record-by-record audit. It describes work visible in the deliverables; it does not claim undocumented VBA, macros, automated refresh, or business outcomes.
 
 ## 1. Objective and data flow
 
@@ -32,23 +32,23 @@ Five exported tables → MySQL analysis → Power BI model/reporting
 
 ## 2. Cleaning and source preservation
 
-### Exact-duplicate removal
+### Duplicate removal
 
-- Original transaction records: **139,090**.
-- Exact duplicate rows identified and removed: **1,090**.
-- Final retained records: **138,000**, corresponding to **138,000 unique `Order_ID` values**.
-- **No unique order was lost.** The final fact export contains every unique source `Order_ID` exactly once.
-- All **33 original fields** are retained in `Raw_Data`; the fact table intentionally selects 18 relevant transaction fields.
+The original dataset contained **139,090 records**. After removing **1,090 exact duplicate records**, the cleaned dataset contained **138,000 unique orders**.
 
-This is a defensible duplicate-removal claim, not a claim that thousands of unrelated errors or outliers were corrected.
+Every unique source `Order_ID` is retained exactly once in the exported fact table. The cleaned `Raw_Data` sheet still contains all **33 original fields**. The analytical fact table selects 18 transaction fields relevant to reporting.
+
+The verified cleaning result is exact duplicate removal. It should not be interpreted as evidence of other corrections, such as outlier removal, unless those corrections are separately documented.
 
 ### Date and percentage handling
 
-- `Order_Date` and `Delivery_Date` are represented as Excel date values in the workbook and exported as day-month-year dates.
-- **5,937 Cancelled orders** have no delivery date in the original source. The latest cleaned workbook shows blank delivery dates for these orders, and the exported `Fact_Sales.csv` also contains empty values for them.
-- Technical nuance: in `Raw_Data` the blank is stored as an Excel empty string; linked `Fact_Sales` formula results are blank, and the SQL import treats the empty exported dates as `NULL`. No fictional delivery dates are assigned.
-- Source `Discount_Percent` uses percentage points (for example, `10` means ten percent). Excel displays this as `10%` and stores the proportion as `0.10`. The CSV export displays `10%`; subsequent imports must normalize this format before calculations.
-- Currency columns are formatted in INR for presentation. Formatting does not change their economic meaning.
+The workbook stores `Order_Date` and `Delivery_Date` as Excel dates. These are displayed as dates in the workbook and exported in day, month, year format.
+
+All **5,937 Cancelled orders** have blank delivery dates in the latest workbook and in `Fact_Sales.csv`. The `Raw_Data` sheet stores an Excel empty string, the linked fact formula displays a blank, and the SQL import represents the exported empty date as `NULL`. No delivery date is invented.
+
+In the original source, `Discount_Percent` uses percentage points, so a value of `10` means ten percent. Excel stores the corresponding value as `0.10` and displays it as `10%`. The exported CSV also displays `10%`, making percentage conversion an important consideration during import.
+
+INR currency formatting is used for presentation and does not change the underlying amounts.
 
 ### Avoiding unnecessary source changes
 
@@ -150,12 +150,14 @@ This dynamic column-heading match reduces dependency on a hardcoded source colum
 | Formula error-type cells in the saved workbook | 0 |
 | Calendar dates missing from the 1,111-day range | 0 |
 
-**Financial validation equations:**
+**Financial validation equations**
 
-- `Gross_Sales = Quantity × Unit_Price`
-- `Discount_Amount = Gross_Sales × Discount_Percent / 100` (percentage-point input)
-- `Net_Sales = Gross_Sales − Discount_Amount`
-- For **Delivered** orders, recorded `Profit ≈ Net_Sales − Quantity × Unit_Cost`
+| Metric | Check performed |
+|:--|:--|
+| Gross sales | `Gross_Sales = Quantity × Unit_Price` |
+| Discount amount | `Discount_Amount = Gross_Sales × Discount_Percent / 100` (source percentage points) |
+| Net sales | `Net_Sales = Gross_Sales − Discount_Amount` |
+| Delivered order profit | `Profit ≈ Net_Sales − Quantity × Unit_Cost` |
 
 These are validation rules observed in the provided dataset; they are **not** a claim that the workbook independently recalculates the source-coded revenue/profit columns.
 
@@ -173,7 +175,7 @@ These are validation rules observed in the provided dataset; they are **not** a 
 
 The source stores **positive `Net_Sales` for Returned and Cancelled records**, despite their statuses. Summing all statuses and calling the result realized revenue would overstate delivered-order sales. Recorded `Profit` is an **estimated product contribution**, not audited net profit after all business expenses. Shipping-charge and refund-accounting semantics cannot be established from the source alone.
 
-## 7. What this Excel phase proves—and what it does not
+## 7. What the Excel work demonstrates
 
 **Demonstrated:** Exact duplicate removal, row-level source preservation, structured fact/dimension construction, `UNIQUE`, `INDEX/MATCH`, `XLOOKUP`, date functions, and data-quality/financial reconciliation.
 
@@ -181,6 +183,5 @@ The source stores **positive `Net_Sales` for Returned and Cancelled records**, d
 
 The complete ~60 MB workbook and detailed customer-level CSV files are **not included in this public repository** at this stage. They contain customer names and location attributes and should not be published without a deliberate data-sharing and provenance review. This documentation and the SQL scripts communicate the verified work without exposing row-level personal information.
 
----
 
 *Audit basis: user-provided original CSV, finalized Excel workbook and five exported dimensional/fact CSVs; verified October 2026. SQL business-question results and Power BI dashboard development are documented separately.*
