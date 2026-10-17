@@ -1,4 +1,4 @@
-# Indian Retail Sales & Profitability Intelligence
+# Indian Retail Sales & Profitability Analytics
 
 **Microsoft Excel | MySQL | Power BI | DAX**
 
@@ -90,14 +90,14 @@ With the prepared tables imported into MySQL, I used joins, CTEs, conditional ag
 
 ### All Six SQL Business Questions
 
-| ID | Focus | SQL file |
+| ID | Business Question | SQL file |
 |:--|:--|:--|
-| BQ 01 | Product profitability | [View query](SQL/BQ_01_Product_Profitability.sql) |
-| BQ 02 | High value and repeat customers | [View query](SQL/BQ_02_Customer_Analysis.sql) |
-| BQ 03 | Monthly sales growth | [View query](SQL/BQ_03_Monthly_Sales_Growth.sql) |
-| BQ 04 | Discount impact on profitability | [View query](SQL/BQ_04_Discount_Analysis.sql) |
-| BQ 05 | Employee sales and profit rankings | [View query](SQL/BQ_05_Employee_Performance.sql) |
-| BQ 06 | Channel performance | [View query](SQL/BQ_06_Channel_Performance.sql) |
+| BQ 01 | Which 10 products generate the highest estimated profit, and what are their profit margins and contributions to delivered revenue? | [View query](SQL/BQ_01_Product_Profitability.sql) |
+| BQ 02 | Who are the top 20 customers by delivered spending, and how do their order frequency, average order value, and repeat purchase status compare? | [View query](SQL/BQ_02_Customer_Analysis.sql) |
+| BQ 03 | How did delivered revenue change month by month, including month over month growth and cumulative revenue? | [View query](SQL/BQ_03_Monthly_Sales_Growth.sql) |
+| BQ 04 | How do revenue, estimated profit margins, discounts, and average order values vary across discount bands? | [View query](SQL/BQ_04_Discount_Analysis.sql) |
+| BQ 05 | How do sales employees rank by delivered revenue and estimated profit, and who performs above or below average revenue? | [View query](SQL/BQ_05_Employee_Performance.sql) |
+| BQ 06 | How do sales channels compare on delivered revenue, estimated profit, return rates, and cancellation rates? | [View query](SQL/BQ_06_Channel_Performance.sql) |
 
 Other useful findings include Corporate repeat customers among the top 20 buyers, and an estimated profit margin of **21.19%** for orders without discounts compared with **11.67%** for the 6% to 10% discount group. This is an observed difference between groups, not proof that discounts alone caused the margin change.
 
@@ -122,4 +122,4 @@ The report and final dashboard screenshots will be published once they are compl
 
 This project uses a **synthetic practice dataset generated for portfolio learning**. The repository shares the documented transformation process, schema, six SQL queries, and their execution screenshots. The complete source workbook and row level data are not included; the original generated dataset's public redistribution rights have not been independently established. To execute the SQL files, load the corresponding prepared fact and dimension tables into MySQL 8 or later.
 
-**Repository:** [Indian Retail Sales & Profitability Intelligence](https://github.com/forevershivam/indian-retail-sales-profitability-intelligence)
+**Repository:** [Indian Retail Sales & Profitability Analytics](https://github.com/forevershivam/Indian-Retail-Sales-Profitability-Analytics)
