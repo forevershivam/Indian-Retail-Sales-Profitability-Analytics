@@ -40,6 +40,10 @@ All 138,000 exported fact records were checked against the source across 18 fiel
 
 **Detailed methods and evidence:** [Excel Data Preparation](Excel/Data_Preparation.md)
 
+**Fact Sales workbook view**
+
+![Excel fact table with order level fields](Screenshots/Excel/02_Fact_Sales.png)
+
 ## Data model
 
 | Table | Rows | Purpose |
@@ -53,6 +57,10 @@ All 138,000 exported fact records were checked against the source across 18 fiel
 The model is designed around the order level fact table. Power BI relationship settings will be finalized during dashboard development.
 
 **Field definitions and validation rules:** [Data Dictionary](Dataset/Data_Dictionary.md)
+
+**Current Power BI data model**
+
+![Fact Sales and its four dimension tables](Screenshots/Model/PowerBI_Star_Schema.png)
 
 ## SQL business questions
 
@@ -84,6 +92,12 @@ Revenue comparisons use delivered orders. The channel analysis also examines ret
 
 These are descriptive findings. Discount margin differences do not prove causation, and status based cancellation rates do not measure the full order lifecycle.
 
+**Sales channel analysis result**
+
+![MySQL sales channel analysis result](Screenshots/SQL/BQ_06_Sales_Channel.png)
+
+[View all Excel, SQL, and model screenshots](Screenshots/README.md). Customer and employee names are hidden in public screenshots where relevant.
+
 ## Power BI and project status
 
 Power BI work is in progress. The remaining tasks are to verify relationships, create DAX measures, complete six Power BI reporting questions, and publish interactive dashboards.
@@ -95,7 +109,7 @@ Power BI work is in progress. The remaining tasks are to verify relationships, c
 | Six SQL business questions | Final business recommendations |
 | Excel documentation and data dictionary | Dashboard screenshots and report |
 
-The repository currently contains the [Excel documentation](Excel/), [Data Dictionary](Dataset/), and [six SQL files](SQL/). SQL scripts require MySQL 8 or later and the corresponding tables to be imported before execution.
+The repository contains [Excel documentation](Excel/), the [Data Dictionary](Dataset/), [six SQL files](SQL/), and a [screenshot gallery](Screenshots/README.md). SQL scripts require MySQL 8 or later and the corresponding tables to be imported before execution.
 
 ## Data availability
 
