@@ -175,6 +175,10 @@ These are validation rules observed in the provided dataset; they are **not** a 
 
 The source stores **positive `Net_Sales` for Returned and Cancelled records**, despite their statuses. Summing all statuses and calling the result realized revenue would overstate delivered-order sales. Recorded `Profit` is an **estimated product contribution**, not audited net profit after all business expenses. Shipping-charge and refund-accounting semantics cannot be established from the source alone.
 
+### Workbook screenshots
+
+[Fact Sales worksheet](../Screenshots/Excel/02_Fact_Sales.png), [Product dimension](../Screenshots/Excel/04_Product_Dimension.png), and [Date dimension](../Screenshots/Excel/06_Date_Dimension.png) provide visual evidence of the completed Excel tables. The [full screenshot gallery](../Screenshots/README.md) also includes examples with customer and employee names hidden for public sharing.
+
 ## 7. What the Excel work demonstrates
 
 **Demonstrated:** Exact duplicate removal, row-level source preservation, structured fact/dimension construction, `UNIQUE`, `INDEX/MATCH`, `XLOOKUP`, date functions, and data-quality/financial reconciliation.
