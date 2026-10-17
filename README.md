@@ -5,6 +5,48 @@
 
 An Indian retail analytics portfolio project covering orders placed from January 2023 to December 2025. The work includes Excel data preparation, a fact and dimension model, MySQL validation, and six completed SQL business questions. Power BI reporting is the next stage.
 
+## Top 3 SQL Business Questions
+
+Three selected analyses demonstrate product profitability, time series analysis, and channel performance. Each question links to the executable SQL file and its actual MySQL result.
+
+### BQ 01: Product Profitability
+
+**Business Question:** Which products generate the highest estimated profit, and how much do they contribute to total delivered sales?
+
+**SQL Query:** [View BQ 01 Product Profitability](SQL/BQ_01_Product_Profitability.sql)
+
+**SQL Result Screenshot**
+
+![MySQL output showing product sales, estimated profit, and ranking](Screenshots/SQL/BQ_01_Product_Profitability.png)
+
+**Key Finding:** Wakefit Wooden Bed with Storage ranked first by estimated product profit at approximately ₹61.83 lakh.
+
+### BQ 03: Monthly Sales Growth
+
+**Business Question:** How does monthly delivered revenue change over time, and what are the month over month growth rates?
+
+**SQL Query:** [View BQ 03 Monthly Sales Growth](SQL/BQ_03_Monthly_Sales_Growth.sql)
+
+**SQL Result Screenshot**
+
+![MySQL output showing monthly revenue and growth](Screenshots/SQL/BQ_03_Monthly_Growth.png)
+
+**Key Finding:** October 2025 delivered revenue reached approximately ₹7.37 crore, a 71.77% increase over September. This pattern warrants further investigation rather than an assumed explanation.
+
+### BQ 06: Sales Channel Performance
+
+**Business Question:** Which sales channels generate the highest delivered revenue and estimated profit, and how do return and cancellation rates compare?
+
+**SQL Query:** [View BQ 06 Sales Channel Performance](SQL/BQ_06_Channel_Performance.sql)
+
+**SQL Result Screenshot**
+
+![MySQL output comparing sales channel revenue and order status rates](Screenshots/SQL/BQ_06_Sales_Channel.png)
+
+**Key Finding:** Retail Store contributed 30.02% of delivered revenue. Marketplace had a 7.53% cancellation rate, making its order handling a useful area to investigate.
+
+[View all six SQL business questions](SQL/) and [the full screenshot gallery](Screenshots/README.md).
+
 ## Business objective
 
 Analyze product profitability, customer buying patterns, monthly growth, discount performance, sales employees, and sales channels. Delivered orders are reported separately from returns and cancellations so that source sales amounts are not mistaken for completed revenue.
@@ -92,11 +134,7 @@ Revenue comparisons use delivered orders. The channel analysis also examines ret
 
 These are descriptive findings. Discount margin differences do not prove causation, and status based cancellation rates do not measure the full order lifecycle.
 
-**Sales channel analysis result**
-
-![MySQL sales channel analysis result](Screenshots/SQL/BQ_06_Sales_Channel.png)
-
-[View all Excel, SQL, and model screenshots](Screenshots/README.md). Customer and employee names are hidden in public screenshots where relevant.
+Customer and employee names are hidden in public screenshots where relevant.
 
 ## Power BI and project status
 
