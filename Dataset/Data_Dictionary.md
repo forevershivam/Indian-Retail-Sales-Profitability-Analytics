@@ -81,6 +81,8 @@ For correct chronological visualization, sort `Month_Name` by `Month_Num` (and u
 
 The existing Power BI model screenshot shows four dimension-to-fact relationships. Exact date-relationship activation and final data types should be verified in Power BI Desktop before the dashboard is finalized. `Delivery_Date` is a second date role; reporting by it needs an explicit relationship strategy rather than assuming it uses the `Order_Date` relationship.
 
+**Model screenshot:** [Power BI fact and dimension relationships](../Screenshots/Model/PowerBI_Star_Schema.png). This is the existing model view; final reporting relationships and DAX measures are still under development.
+
 ## 5. Data integrity and reconciliation rules
 
 | Validation | Verified result |
