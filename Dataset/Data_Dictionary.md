@@ -1,6 +1,6 @@
 # Data Dictionary & Analytical Model
 
-**Project:** Indian Retail Sales & Profitability Intelligence  
+**Project:** Indian Retail Sales & Profitability Analytics  
 **Dataset period:** Order dates 2023-01-01 to 2025-12-31  
 **Data lineage:** Original 33-column retail CSV → cleaned `Raw_Data` → five exported analytical tables  
 **Status:** Verified against the original CSV, user workbook, and exported CSV values.
