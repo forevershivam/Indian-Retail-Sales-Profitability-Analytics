@@ -1,158 +1,125 @@
 # Indian Retail Sales & Profitability Intelligence
 
-**Tools:** Microsoft Excel, MySQL, Power BI and DAX  
-**Status:** Excel and SQL completed. Power BI in progress.
+**Microsoft Excel | MySQL | Power BI | DAX**
 
-An Indian retail analytics portfolio project covering orders placed from January 2023 to December 2025. The work includes Excel data preparation, a fact and dimension model, MySQL validation, and six completed SQL business questions. Power BI reporting is the next stage.
+**Project status:** Excel preparation and SQL analysis complete. Power BI reporting in progress.
 
-## Top 3 SQL Business Questions
+## Project Overview
 
-Three selected analyses demonstrate product profitability, time series analysis, and channel performance. Each question links to the executable SQL file and its actual MySQL result.
+I started this project with a generated retail practice dataset containing 139,090 transaction records from January 2023 through December 2025. The aim was to turn the raw data into something useful for business analysis: a trustworthy sales dataset, a structured analytical model, and clear answers to questions about profitability, customers, growth, and sales channels.
 
-### BQ 01: Product Profitability
+Rather than moving straight to visualizations, I began by preparing the data in Excel. I then used MySQL to validate the figures and investigate six business questions. The next stage is to build interactive Power BI reports using the prepared model.
 
-**Business Question:** Which products generate the highest estimated profit, and how much do they contribute to total delivered sales?
+## From Raw Data to Reliable Sales Figures
 
-**SQL Query:** [View BQ 01 Product Profitability](SQL/BQ_01_Product_Profitability.sql)
+The first step was to remove **1,090 exact duplicate records**, leaving **138,000 unique orders**. I retained the original 33 fields in the cleaned `Raw_Data` sheet, then prepared an order level `Fact_Sales` table and four dimension tables using `UNIQUE`, `INDEX` with `MATCH`, `XLOOKUP`, and Excel date functions.
 
-**SQL Result Screenshot**
+I compared all 138,000 exported fact records against the original source across 18 matching fields. After accounting for different date, currency, and percentage formats, the values matched. Customer, product, and employee keys were also checked, while the **5,937 cancelled orders** retained blank delivery dates.
 
-![MySQL output showing product sales, estimated profit, and ranking](Screenshots/SQL/BQ_01_Product_Profitability.png)
+**See the work:** [Excel Data Preparation](Excel/Data_Preparation.md) and [Data Dictionary](Dataset/Data_Dictionary.md).
 
-**Key Finding:** Wakefit Wooden Bed with Storage ranked first by estimated product profit at approximately ₹61.83 lakh.
+![Prepared Fact Sales table in Excel](Screenshots/Excel/02_Fact_Sales.png)
 
-### BQ 03: Monthly Sales Growth
+### Analytical Model
 
-**Business Question:** How does monthly delivered revenue change over time, and what are the month over month growth rates?
+The prepared model contains one fact table and four dimensions.
 
-**SQL Query:** [View BQ 03 Monthly Sales Growth](SQL/BQ_03_Monthly_Sales_Growth.sql)
+| Table | Records | Purpose |
+|:--|--:|:--|
+| `Fact_Sales` | 138,000 | Order quantities, sales, profit, status, and keys |
+| `Dim_Customer` | 39,884 | Customer and segment details |
+| `Dim_Product` | 268 | Product, category, and brand details |
+| `Dim_Employee` | 24 | Sales employee details |
+| `Dim_Date` | 1,111 | Calendar attributes for reporting |
 
-**SQL Result Screenshot**
+![Existing Power BI model showing the fact table and dimensions](Screenshots/Model/PowerBI_Star_Schema.png)
 
-![MySQL output showing monthly revenue and growth](Screenshots/SQL/BQ_03_Monthly_Growth.png)
+The model structure is already prepared. Final relationships and reporting measures will be reviewed in Power BI.
 
-**Key Finding:** October 2025 delivered revenue reached approximately ₹7.37 crore, a 71.77% increase over September. This pattern warrants further investigation rather than an assumed explanation.
+## Defining Revenue Correctly
 
-### BQ 06: Sales Channel Performance
+A key issue surfaced during validation: **Returned and Cancelled orders also have positive `Net_Sales` values in the source**. Adding every order together would therefore give a misleading picture of delivered sales.
 
-**Business Question:** Which sales channels generate the highest delivered revenue and estimated profit, and how do return and cancellation rates compare?
+For the financial analysis, I used only orders marked **Delivered**. Returns and cancellations are examined separately where relevant.
 
-**SQL Query:** [View BQ 06 Sales Channel Performance](SQL/BQ_06_Channel_Performance.sql)
-
-**SQL Result Screenshot**
-
-![MySQL output comparing sales channel revenue and order status rates](Screenshots/SQL/BQ_06_Sales_Channel.png)
-
-**Key Finding:** Retail Store contributed 30.02% of delivered revenue. Marketplace had a 7.53% cancellation rate, making its order handling a useful area to investigate.
-
-[View all six SQL business questions](SQL/) and [the full screenshot gallery](Screenshots/README.md).
-
-## Business objective
-
-Analyze product profitability, customer buying patterns, monthly growth, discount performance, sales employees, and sales channels. Delivered orders are reported separately from returns and cancellations so that source sales amounts are not mistaken for completed revenue.
-
-## Dataset and verified KPIs
-
-| Metric | Value |
+| Verified measure | Value |
 |:--|--:|
-| Original records | 139,090 |
-| Exact duplicates removed | 1,090 |
-| Cleaned, unique orders | **138,000** |
+| Cleaned orders | **138,000** |
 | Delivered orders | **126,490** |
 | Returned orders | 5,573 |
 | Cancelled orders | 5,937 |
-| Customers | 39,884 |
-| Products | 268 |
-| Sales employees | 24 |
-| Sales channels | 5 |
+| Delivered revenue | **₹1,551,711,257.30** |
+| Estimated product profit | **₹262,956,576.19** |
+| Estimated product profit margin | **16.95%** |
 
-| Delivered order KPI | Result |
-|:--|--:|
-| **Revenue** | **₹1,551,711,257.30** |
-| **Estimated product profit** | **₹262,956,576.19** |
-| **Estimated product profit margin** | **16.95%** |
+The profit field represents *estimated product profit*, not audited net profit after all business expenses.
 
-These figures include only orders marked `Delivered`. The source records positive `Net_Sales` even on Returned and Cancelled orders. Profit is an estimated product measure, not audited company net profit.
+## What the SQL Analysis Revealed
 
-## Excel data preparation
+With the prepared tables imported into MySQL, I used joins, CTEs, conditional aggregation, `LAG()`, and `DENSE_RANK()` to explore six business questions. Three examples show the range of analysis.
 
-The original 33 fields were retained in `Raw_Data` after removing 1,090 exact duplicates. I prepared `Fact_Sales` with 138,000 unique orders and four supporting dimensions using Excel formulas including `UNIQUE`, `INDEX` with `MATCH`, `XLOOKUP`, and date functions.
+### BQ 01: Product Profitability
 
-All 138,000 exported fact records were checked against the source across 18 fields, with no mismatches after format normalization. Customer, product and employee references were validated. All 5,937 cancelled orders have blank delivery dates.
+**Business question:** Which products generate the highest estimated profit, and how much do they contribute to total delivered sales?
 
-**Detailed methods and evidence:** [Excel Data Preparation](Excel/Data_Preparation.md)
+**SQL query:** [Product Profitability](SQL/BQ_01_Product_Profitability.sql)
 
-**Fact Sales workbook view**
+![Result of the product profitability SQL analysis](Screenshots/SQL/BQ_01_Product_Profitability.png)
 
-![Excel fact table with order level fields](Screenshots/Excel/02_Fact_Sales.png)
+**Finding:** Wakefit Wooden Bed with Storage ranked first, generating approximately **₹61.83 lakh** in estimated product profit. This helps identify high contribution products worth examining in inventory and product mix decisions.
 
-## Data model
+### BQ 03: Monthly Sales Growth
 
-| Table | Rows | Purpose |
-|:--|--:|:--|
-| `Fact_Sales` | 138,000 | Order amounts, status and dimension keys |
-| `Dim_Customer` | 39,884 | Customer details and segments |
-| `Dim_Product` | 268 | Products, categories and brands |
-| `Dim_Employee` | 24 | Sales employee details |
-| `Dim_Date` | 1,111 | Calendar dates and reporting attributes |
+**Business question:** How does delivered revenue change month by month, and what do the month over month growth rates show?
 
-The model is designed around the order level fact table. Power BI relationship settings will be finalized during dashboard development.
+**SQL query:** [Monthly Sales Growth](SQL/BQ_03_Monthly_Sales_Growth.sql)
 
-**Field definitions and validation rules:** [Data Dictionary](Dataset/Data_Dictionary.md)
+![Result of the monthly revenue growth SQL analysis](Screenshots/SQL/BQ_03_Monthly_Growth.png)
 
-**Current Power BI data model**
+**Finding:** October 2025 delivered revenue was approximately **₹7.37 crore**, with **71.77% growth** over September. October was also strong in the prior two years, suggesting a possible seasonal pattern to investigate. The dataset alone does not establish what caused the increase.
 
-![Fact Sales and its four dimension tables](Screenshots/Model/PowerBI_Star_Schema.png)
+### BQ 06: Sales Channel Performance
 
-## SQL business questions
+**Business question:** Which channels produce the highest delivered revenue and estimated profit, and how do returns and cancellations compare?
 
-Five prepared tables were imported into MySQL. The queries use joins, CTEs, conditional aggregation, and window functions including `LAG()` and `DENSE_RANK()`.
+**SQL query:** [Sales Channel Performance](SQL/BQ_06_Channel_Performance.sql)
 
-| Question | Analysis | Query |
+![Result of the sales channel performance SQL analysis](Screenshots/SQL/BQ_06_Sales_Channel.png)
+
+**Finding:** Retail Store contributed **30.02%** of delivered revenue, while Marketplace showed a **7.53% cancellation rate**. A useful next business step would be to investigate cancellation reasons in Marketplace orders before deciding on changes.
+
+### All Six SQL Business Questions
+
+| ID | Focus | SQL file |
 |:--|:--|:--|
-| BQ 01 | Most profitable products | [Product Profitability](SQL/BQ_01_Product_Profitability.sql) |
-| BQ 02 | High value and repeat customers | [Customer Analysis](SQL/BQ_02_Customer_Analysis.sql) |
-| BQ 03 | Monthly revenue and growth | [Monthly Sales Growth](SQL/BQ_03_Monthly_Sales_Growth.sql) |
-| BQ 04 | Discount bands and profitability | [Discount Analysis](SQL/BQ_04_Discount_Analysis.sql) |
-| BQ 05 | Employee revenue and profit rankings | [Employee Performance](SQL/BQ_05_Employee_Performance.sql) |
-| BQ 06 | Channel sales, returns and cancellations | [Channel Performance](SQL/BQ_06_Channel_Performance.sql) |
+| BQ 01 | Product profitability | [View query](SQL/BQ_01_Product_Profitability.sql) |
+| BQ 02 | High value and repeat customers | [View query](SQL/BQ_02_Customer_Analysis.sql) |
+| BQ 03 | Monthly sales growth | [View query](SQL/BQ_03_Monthly_Sales_Growth.sql) |
+| BQ 04 | Discount impact on profitability | [View query](SQL/BQ_04_Discount_Analysis.sql) |
+| BQ 05 | Employee sales and profit rankings | [View query](SQL/BQ_05_Employee_Performance.sql) |
+| BQ 06 | Channel performance | [View query](SQL/BQ_06_Channel_Performance.sql) |
 
-**Exactly six business questions** were completed. The separate SQL reconciliation query was used only for validation.
+Other useful findings include Corporate repeat customers among the top 20 buyers, and an estimated profit margin of **21.19%** for orders without discounts compared with **11.67%** for the 6% to 10% discount group. This is an observed difference between groups, not proof that discounts alone caused the margin change.
 
-Revenue comparisons use delivered orders. The channel analysis also examines returns and cancellations separately, so its status rates remain distinct from financial KPIs.
+The project contains **six SQL business questions**. A separate reconciliation query was used for verification only and is not counted as a business question.
 
-### Findings from SQL
+[Explore all execution screenshots and Excel evidence](Screenshots/README.md).
 
-| Area | Result |
+## Next Stage: Power BI
+
+The SQL analysis provides a foundation for the reporting stage. I will verify the existing model relationships, create DAX measures, complete six Power BI business questions, and build interactive dashboards for sales and profitability analysis.
+
+| Completed | In progress |
 |:--|:--|
-| Products | Wakefit Wooden Bed with Storage ranked first in estimated profit at **₹61.83 lakh**. |
-| Customers | The top 20 customers by delivered revenue were Corporate repeat customers. |
-| Growth | October 2025 revenue was **₹7.37 crore**, with **71.77%** growth over September. |
-| Discounts | Estimated margin was **21.19%** without discount versus **11.67%** in the 6% to 10% discount band. |
-| Employees | The top salesperson by revenue generated approximately **₹8.27 crore**. |
-| Channels | Retail Store contributed **30.02%** of delivered revenue. Marketplace had a **7.53%** cancellation rate. |
-
-These are descriptive findings. Discount margin differences do not prove causation, and status based cancellation rates do not measure the full order lifecycle.
-
-Customer and employee names are hidden in public screenshots where relevant.
-
-## Power BI and project status
-
-Power BI work is in progress. The remaining tasks are to verify relationships, create DAX measures, complete six Power BI reporting questions, and publish interactive dashboards.
-
-| Completed | In progress or pending |
-|:--|:--|
-| Excel cleaning and source validation | Power BI relationships and DAX |
-| Fact and dimension preparation | Interactive dashboards |
-| Six SQL business questions | Final business recommendations |
+| Excel cleaning and fact/dimension preparation | Power BI model verification |
+| Data validation and reconciliation | DAX measures and interactive dashboards |
+| Six MySQL business analyses | Final business recommendations |
 | Excel documentation and data dictionary | Dashboard screenshots and report |
 
-The repository contains [Excel documentation](Excel/), the [Data Dictionary](Dataset/), [six SQL files](SQL/), and a [screenshot gallery](Screenshots/README.md). SQL scripts require MySQL 8 or later and the corresponding tables to be imported before execution.
+The report and final dashboard screenshots will be published once they are completed and reviewed.
 
-## Data availability
+## Data and Reproducibility
 
-The full workbook and individual customer records are not publicly included because they contain names and location information. Sharing the source files would require a privacy and usage rights review.
+This project uses a **synthetic practice dataset generated for portfolio learning**. The repository shares the documented transformation process, schema, six SQL queries, and their execution screenshots. The complete source workbook and row level data are not included; the original generated dataset's public redistribution rights have not been independently established. To execute the SQL files, load the corresponding prepared fact and dimension tables into MySQL 8 or later.
 
-This is a portfolio project. Results describe the supplied dataset and do not establish independently verified commercial impact.
-
-**GitHub:** [forevershivam](https://github.com/forevershivam)
+**Repository:** [Indian Retail Sales & Profitability Intelligence](https://github.com/forevershivam/indian-retail-sales-profitability-intelligence)
