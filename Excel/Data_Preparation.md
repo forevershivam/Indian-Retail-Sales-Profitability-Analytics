@@ -1,6 +1,6 @@
 # Excel Data Preparation & Dimensional Modeling
 
-**Project:** Indian Retail Sales & Profitability Intelligence  
+**Project:** Indian Retail Sales & Profitability Analytics  
 **Stage:** Excel data preparation completed  
 **Tools demonstrated:** Microsoft Excel, dynamic arrays, lookup formulas, date functions, source-to-output reconciliation
 
